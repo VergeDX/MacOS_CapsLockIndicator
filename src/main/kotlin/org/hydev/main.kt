@@ -25,7 +25,6 @@ class GlobalKeyListener : NativeKeyListener {
 }
 
 private val defaultToolkit = Toolkit.getDefaultToolkit()
-
 fun main() {
     // Hide java icon in dock.
     System.setProperty("apple.awt.UIElement", "true")
@@ -48,6 +47,8 @@ fun main() {
     GlobalScreen.addNativeKeyListener(GlobalKeyListener())
 }
 
+// Cache all 4 type of image in a map.
+val imageCachedMap = mutableMapOf<String, Image>()
 fun getTrayImage(): Image {
     val capsLockStatusString = if (defaultToolkit.getLockingKeyState(KeyEvent.VK_CAPS_LOCK)) "On" else "Off"
     val styleModeString = if (ProcessExecutor().command("defaults", "read", "-g", "AppleInterfaceStyle")
@@ -57,7 +58,5 @@ fun getTrayImage(): Image {
     // On_Dark.png | On_Light.png | Off_Dark.png | Off_Light.png
     val fileName = "${capsLockStatusString}_$styleModeString.png"
 
-    // Cache all 4 type of image in a map.
-    val imageCachedMap = mutableMapOf<String, Image>()
     return imageCachedMap.getOrPut(fileName) { defaultToolkit.getImage(ClassLoader.getSystemResource(fileName)) }
 }
