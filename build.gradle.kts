@@ -19,7 +19,7 @@ repositories { mavenCentral() }
 tasks.withType<KotlinCompile> { kotlinOptions.jvmTarget = "1.8" }
 
 dependencies {
-    // https://github.com/kristian/system-hook
+    // https://github.com/kwhat/jnativehook
     implementation("com.1stleg:jnativehook:2.1.0")
 
     // https://github.com/zeroturnaround/zt-exec
