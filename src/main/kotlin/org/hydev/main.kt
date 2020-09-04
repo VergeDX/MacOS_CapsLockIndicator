@@ -7,7 +7,6 @@ import org.jnativehook.keyboard.NativeKeyEvent
 import org.jnativehook.keyboard.NativeKeyListener
 import org.zeroturnaround.exec.ProcessExecutor
 import java.awt.*
-import java.awt.Toolkit.getDefaultToolkit
 import java.awt.event.KeyEvent
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -24,6 +23,8 @@ class GlobalKeyListener : NativeKeyListener {
             currentIcon.image = getTrayImage()
     }
 }
+
+private val defaultToolkit = Toolkit.getDefaultToolkit()
 
 fun main() {
     // Hide java icon in dock.
@@ -48,12 +49,15 @@ fun main() {
 }
 
 fun getTrayImage(): Image {
-    val capsLockStatusString = if (getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK)) "On" else "Off"
+    val capsLockStatusString = if (defaultToolkit.getLockingKeyState(KeyEvent.VK_CAPS_LOCK)) "On" else "Off"
     val styleModeString = if (ProcessExecutor().command("defaults", "read", "-g", "AppleInterfaceStyle")
             .readOutput(true).execute().outputUTF8() == "Dark\n"
     ) "Dark" else "Light"
 
     // On_Dark.png | On_Light.png | Off_Dark.png | Off_Light.png
     val fileName = "${capsLockStatusString}_$styleModeString.png"
-    return getDefaultToolkit().createImage(object {}.javaClass.getResource("/$fileName").readBytes())
+
+    // Cache all 4 type of image in a map.
+    val imageCachedMap = mutableMapOf<String, Image>()
+    return imageCachedMap.getOrPut(fileName) { defaultToolkit.getImage(ClassLoader.getSystemResource(fileName)) }
 }
