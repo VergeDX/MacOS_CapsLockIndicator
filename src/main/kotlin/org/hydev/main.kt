@@ -13,7 +13,7 @@ import java.util.logging.Level
 import java.util.logging.Logger
 import kotlin.system.exitProcess
 
-lateinit var currentIcon: TrayIcon
+private lateinit var currentIcon: TrayIcon
 
 class GlobalKeyListener : NativeKeyListener {
     override fun nativeKeyTyped(p0: NativeKeyEvent?) {}

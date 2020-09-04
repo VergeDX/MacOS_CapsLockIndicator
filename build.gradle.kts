@@ -2,7 +2,15 @@
 
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-plugins { kotlin("jvm") version "1.4.0" }
+plugins {
+    kotlin("jvm") version "1.4.0"
+
+    // https://github.com/spotbugs/spotbugs
+    id("com.github.spotbugs") version "4.5.0"
+
+    // https://github.com/ben-manes/gradle-versions-plugin
+    id("com.github.ben-manes.versions") version "0.29.0"
+}
 
 group = "org.hydev"
 version = "1.0-SNAPSHOT"
